@@ -452,6 +452,11 @@ public partial class HubConnectionContext
     /// </summary>
     public virtual void Abort()
     {
+        if (_useAcks && _connectionContext.Features.Get<IReconnectFeature>() is IReconnectFeature feature)
+        {
+            feature.DisableReconnect();
+        }
+
         _allowReconnect = false;
         AbortAllowReconnect();
     }
